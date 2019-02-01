@@ -1,0 +1,87 @@
+spring:
+  application:
+    name: service-zuul
+  cloud:
+      config:
+        failFast: true
+        discovery:
+          enabled: true
+          serviceId: service-config
+      inetutils:
+        ignoredInterfaces:
+          - docker0
+          - veth.*
+          - eth(1|2).*
+      stream:
+        bindings:
+          springCloudBusOutput:
+            destination: springCloudBusInput
+            contentType: application/json
+server:
+  port: 9080
+
+eureka:
+  client:
+    # registry-fetch-interval-seconds: 4
+    serviceUrl:
+      defaultZone: http://localhost:9001/eureka/
+
+
+logging:
+  level:
+    com.netflix.loadbalancer: INFO
+    com.netflix.discovery: INFO
+    org.springframework.security: INFO
+
+# bug in c
+ribbon:
+  ServerListRefreshInterval: 2000
+
+
+
+zuul:
+  routes:
+    customer:
+      path: /customer/**
+      serviceId: service-customer
+      stripPrefix: false
+
+    product:
+      path: /product/**
+      serviceId: service-product
+      stripPrefix: false
+
+    supplier:
+      path: /supplier/**
+      serviceId: service-supplier
+      stripPrefix: false
+
+hystrix:
+  command:
+    users:
+      execution:
+        isolation:
+          strategy: THREAD
+          thread:
+            timeoutInMilliseconds: 10000
+  threadpool:
+    default:
+      coreSize: 50
+
+
+---
+
+spring:
+  profiles: docker
+
+server:
+  port : ${SERVICE_PORT:9005}
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: ${REGISTRY_URL}
+
+
