@@ -1,6 +1,8 @@
 spring:
   application:
     name: service-zuul
+  profiles:
+      active: dev
   cloud:
     config:
       uri: ${GIT_URL:http://localhost:9000/}
@@ -18,27 +20,6 @@ spring:
           springCloudBusOutput:
             destination: springCloudBusInput
             contentType: application/json
-server:
-  port: 9008
-
-eureka:
-  client:
-    # registry-fetch-interval-seconds: 4
-    serviceUrl:
-      defaultZone: http://localhost:9001/eureka/
-
-
-logging:
-  level:
-    com.netflix.loadbalancer: INFO
-    com.netflix.discovery: INFO
-    org.springframework.security: INFO
-
-# bug in c
-ribbon:
-  ServerListRefreshInterval: 2000
-
-
 
 zuul:
   routes:
@@ -69,6 +50,30 @@ hystrix:
     default:
       coreSize: 50
 
+---
+spring:
+  profiles: dev
+  sleuth:
+    enabled: false
+server:
+  port: 9008
+
+eureka:
+  client:
+    # registry-fetch-interval-seconds: 4
+    serviceUrl:
+      defaultZone: http://localhost:9001/eureka/
+
+
+logging:
+  level:
+    com.netflix.loadbalancer: INFO
+    com.netflix.discovery: INFO
+    org.springframework.security: INFO
+
+# bug in c
+ribbon:
+  ServerListRefreshInterval: 2000
 
 ---
 
@@ -76,7 +81,7 @@ spring:
   profiles: docker
 
 server:
-  port : ${SERVICE_PORT:9080}
+  port : ${SERVICE_PORT:9008}
 
 eureka:
   instance:
