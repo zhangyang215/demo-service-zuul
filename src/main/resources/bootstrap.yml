@@ -26,17 +26,17 @@ zuul:
     customer:
       path: /customer/**
       serviceId: service-customer
-      stripPrefix: false
+      stripPrefix: true
 
     product:
       path: /product/**
       serviceId: service-product
-      stripPrefix: false
+      stripPrefix: true
 
     supplier:
       path: /supplier/**
       serviceId: service-supplier
-      stripPrefix: false
+      stripPrefix: true
 
 hystrix:
   command:
