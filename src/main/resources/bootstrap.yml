@@ -22,6 +22,7 @@ spring:
             contentType: application/json
 
 zuul:
+  ribbonIsolationStrategy: THREAD # default: SEMAPHORE
   routes:
     customer:
       path: /customer/**
@@ -50,11 +51,15 @@ hystrix:
     default:
       coreSize: 50
 
+management:
+  endpoints:
+    web:
+      exposure: 
+        include: 'hystrix.stream'
+
 ---
 spring:
   profiles: dev
-  sleuth:
-    enabled: false
 server:
   port: 9008
 
@@ -89,5 +94,3 @@ eureka:
   client:
     service-url:
       defaultZone: ${REGISTRY_URL}
-
-
