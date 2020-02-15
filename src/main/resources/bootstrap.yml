@@ -75,6 +75,7 @@ logging:
     com.netflix.loadbalancer: INFO
     com.netflix.discovery: INFO
     org.springframework.security: INFO
+    com.demo.zuul: DEBUG
 
 # bug in c
 ribbon:
