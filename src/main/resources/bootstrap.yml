@@ -77,10 +77,6 @@ logging:
     org.springframework.security: INFO
     com.demo.zuul: DEBUG
 
-# bug in c
-ribbon:
-  ServerListRefreshInterval: 2000
-
 ---
 
 spring:
@@ -95,3 +91,7 @@ eureka:
   client:
     service-url:
       defaultZone: ${REGISTRY_URL}
+ribbon:
+  MaxAutoRetries: 1 # default 0
+  MaxAutoRetriesNextServer: 2 # default 1
+  OkToRetryOnAllOperations: true # default false
